@@ -1,0 +1,67 @@
+name: Update AltStore Source
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # check every 6 hours
+  workflow_dispatch: {}       # allow manual "Run workflow" button too
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get latest Plezy release
+        id: release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/edde746/plezy/releases/latest > release.json
+          echo "tag=$(jq -r .tag_name release.json)" >> "$GITHUB_OUTPUT"
+          echo "notes<<EOF" >> "$GITHUB_OUTPUT"
+          jq -r .body release.json >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+          IPA_URL=$(jq -r '.assets[] | select(.name=="plezy-ios.ipa") | .browser_download_url' release.json)
+          if [ -z "$IPA_URL" ] || [ "$IPA_URL" = "null" ]; then
+            echo "No plezy-ios.ipa asset found in latest release" >&2
+            exit 1
+          fi
+          echo "ipa_url=$IPA_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if this version is already published
+        id: gate
+        run: |
+          if [ -f source.json ] && \
+             [ "$(jq -r '.apps[0].versions[0].version // empty' source.json)" = "${{ steps.release.outputs.tag }}" ]; then
+            echo "up_to_date=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "up_to_date=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Download IPA
+        if: steps.gate.outputs.up_to_date == 'false'
+        run: curl -L -o plezy.ipa "${{ steps.release.outputs.ipa_url }}"
+
+      - name: Extract metadata from the IPA
+        if: steps.gate.outputs.up_to_date == 'false'
+        run: python3 scripts/read_ipa_metadata.py plezy.ipa > ipa_meta.json
+
+      - name: Build source.json
+        if: steps.gate.outputs.up_to_date == 'false'
+        env:
+          VERSION: ${{ steps.release.outputs.tag }}
+          IPA_URL: ${{ steps.release.outputs.ipa_url }}
+          NOTES: ${{ steps.release.outputs.notes }}
+        run: python3 scripts/build_source.py
+
+      - name: Commit updated source.json
+        if: steps.gate.outputs.up_to_date == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add source.json
+          git commit -m "Update source.json to Plezy ${{ steps.release.outputs.tag }}"
+          git push
