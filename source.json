@@ -1,0 +1,29 @@
+{
+  "name": "Plezy (unofficial, auto-updated)",
+  "identifier": "io.github.am133.plezy-altstore-source",
+  "sourceURL": "https://am133.github.io/plezy-altstore-source/source.json",
+  "apps": [
+    {
+      "name": "Plezy",
+      "bundleIdentifier": "com.edde746.plezy",
+      "developerName": "edde746",
+      "subtitle": "Plex & Jellyfin client",
+      "localizedDescription": "Modern cross-platform Plex & Jellyfin client. This source is an unofficial mirror that tracks the IPA attached to each GitHub release automatically.",
+      "iconURL": "https://raw.githubusercontent.com/edde746/plezy/main/assets/plezy.png",
+      "tintColor": "#1e2327",
+      "size": 48705828,
+      "versions": [
+        {
+          "version": "2.18.0",
+          "date": "2026-09-05",
+          "localizedDescription": "## New features\n\n- Search the Live TV guide for channels and programs\n- Music sessions restore paused on launch\n- Account preferences section\n\n## Playback\n\n- Android playback moves to the mpv player backend\n- ExoPlayer stays selectable under Settings > Playback > Player Backend\n- 10-bit and HDR video reach the display untouched on Android\n- Software-decoded HDR stays HDR on Android\n- Stopping HDR playback no longer leaves the TV black for up to 30 seconds\n- Apple devices keep hardware decoding through a transient decode error\n- Playback starts again after a failed player handoff instead of needing a restart\n- Android direct play no longer switches to the mpv backend mid-episode\n- Android direct play honors DTS-HD MA and container aspect ratios\n- The play-next prompt shows the next episode's thumbnail\n- Play Next Countdown is configurable from 0 to 30 seconds\n- Brightness swipe, volume swipe, and pinch-to-zoom each have their own switch\n- A Deinterlacing toggle for DVD-era content on the mpv backend\n- A 140% zoom preset\n- A separate default streaming quality for cellular connections\n\n## Plex\n\n- A quality preset direct plays a file already under it instead of transcoding\n- Shows with credits detection disabled no longer get a skip-credits action\n- Instant Mix reports failures instead of doing nothing\n- Home-video libraries offer User Rating and Plays sorts\n\n## Jellyfin & Emby\n\n- A device without a hardware decoder is no longer handed that codec's transcode\n- Servers with an AV1 encoder can transcode to AV1\n- Audio can no longer be what blocks direct play\n- A video-only transcode copies DTS or TrueHD instead of re-encoding it\n\n## Explore & trackers\n\n- Sign in to Seerr with Quick Connect\n- Seerr accepts a URL typed without http:// or https://\n\n## Downloads\n\n- Downloaded tracks are filed under Music/Artist/Album with real track names\n\n## UI\n\n- A Grid Spacing setting controls the gap between library posters\n- Settings are reorganized into General, Appearance, and Playback homes\n- Artwork and library requests are several times faster on Android\n\n## TV\n\n- Mark a whole season watched from the show screen\n- TrueHD, DTS-HD MA, and E-AC3 bitstream to the receiver on Android TV\n- Bitstream passthrough is on by default on Android TV\n- HDR letterbox bars are black instead of gray on Fire TV\n\n## Desktop\n\n- Text and icons render correctly on macOS again\n- Video stays visible while the player UI is on screen on Windows\n- Always on Top persists across episodes",
+          "downloadURL": "https://github.com/edde746/plezy/releases/download/2.18.0/plezy-ios.ipa",
+          "size": 48705828,
+          "sha256": "431201cfcbf63a54285e2ccf8a0e3a5c47179ca6892d3eec2751e6ff0ff5a6b1",
+          "minOSVersion": "15.5"
+        }
+      ]
+    }
+  ],
+  "news": []
+}
